@@ -1,9 +1,31 @@
+import { useEffect } from 'react';
 import './App.css';
+import * as RENDERER from './functionalities/scatterplotRendering';
+import * as UTILS from './functionalities/utils';
+
 
 function App() {
 
 	const mainSvgSize = 600;
+	const mainSvgMargin = 30;
 	const datasetList = require("./dataset_list.json");
+	let canvas, ctx;
+
+	let normalizedData = null;
+
+	useEffect(() => {
+		canvas = document.getElementById("mainCanvas");
+		ctx = canvas.getContext("2d");
+		RENDERER.initiateSplot(mainSvgSize, canvas, ctx);
+	}, []);
+
+	
+	const selectScatterplot = (e) => {
+		const data = require(`./pre_datasets/${e.target.value}`);
+		normalizedData = UTILS.normalize(data, mainSvgSize, mainSvgMargin);
+		RENDERER.drawSplot(mainSvgSize, canvas, ctx, normalizedData)
+	}
+
 
   return (
     <div className="App">
@@ -13,17 +35,17 @@ function App() {
 			</div>
 
 			<div id="mainSvgDiv">
-				<svg id="mainSvg" width={mainSvgSize} height={mainSvgSize}></svg>
+				<canvas id="mainCanvas" width={mainSvgSize} height={mainSvgSize}></canvas>
 				<div id="mainSvgButtonDiv">
-					<button id="startDrawing" class="svgButton">Start Drawing!!</button>
-					<button id="uploadButton" class="svgButton">Upload JSON dataset</button>
-					<select class="svgSelect">
+					<button id="startDrawing" className="svgButton">Start Drawing!!</button>
+					<button id="uploadButton" className="svgButton">Upload JSON dataset</button>
+					<select className="svgSelect" onChange={selectScatterplot}>
 						<option value="none">Select a Scatterplot</option>
-						{datasetList.map((dataset) => (
-							<option value={dataset}>{dataset}</option>
+						{datasetList.map((dataset, i) => (
+							<option value={dataset} key={i}>{dataset}</option>
 						))}
 					</select>
-					<button id="initializeButton" class="svgButton">Initialize!!</button>
+					<button id="initializeButton" className="svgButton">Initialize!!</button>
 				</div>
 			</div>
 			<p>
