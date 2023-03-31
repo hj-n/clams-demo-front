@@ -8,6 +8,7 @@ export function mouseHoverMatCell(rowCell, matCell, val) {
 		.attr("stroke-opacity", 1);
 	
 	CLAMSRENDERING.emphasizeGMM([rowCell, matCell]);
+	CLAMSRENDERING.updateSepAmbGraph(rowCell, matCell);
 	
 
 }
@@ -17,4 +18,5 @@ export function mouseOutMatCell(rowCell, matCell) {
 		.attr("stroke", "none");
 	
 	CLAMSRENDERING.emphasizeGMM([]);
+	CLAMSRENDERING.deleteSepAmbGraph();
 }

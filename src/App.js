@@ -96,7 +96,7 @@ function App() {
 			means  = responseParseResult.means;
 			covs   = responseParseResult.covs;
 			labels = UTILS.extractLabels(responseParseResult.proba);
-			CLAMSRENDERER.renderMat(document.getElementById("sepMat"), clamsViewSize, sepMat, colorScale);
+			CLAMSRENDERER.renderMat(document.getElementById("sepMat"), clamsViewSize, sepMat, colorScale, true);
 			CLAMSRENDERER.renderMat(document.getElementById("ambMat"), clamsViewSize, ambMat, colorScale);
 			RENDERER.initializeSplot(clamsViewSize, clamsCanvas, clamsCtx);
 			covs = UTILS.decomposeCov(covs);

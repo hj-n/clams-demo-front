@@ -75,9 +75,15 @@ export function emphasizeGMM(emphasizingIndices) {
 
 }
 
-export function renderMat(svg, size, mat, colorScale) {
+let SEP = null;
+
+export function renderMat(svg, size, mat, colorScale, isSep=false) {
 	const cellNum = mat.length;
 	const cellSize = size / cellNum;
+
+	if (isSep) {
+		SEP = mat;
+	}
 
 	// matrix is a 2d array
 	d3.select(svg)
@@ -142,11 +148,17 @@ export function renderMat(svg, size, mat, colorScale) {
 		.attr("fill", (d, i) => colorScale(i + 1))
 }
 
+let XSCALE = null;
+let YSCALE = null;
+
 
 export function initiateSepAmbGraph(svg, size, margin) {
 	// draw axes
 	const xScale = d3.scaleLinear().domain([0, 1]).range([margin, size - margin]);
 	const yScale = d3.scaleLinear().domain([0, 1]).range([size - margin, margin]);
+
+	XSCALE = xScale;
+	YSCALE = yScale;
 
 	const xAxis = d3.axisBottom(xScale).ticks(5);
 	const yAxis = d3.axisLeft(yScale).ticks(5);
@@ -222,6 +234,49 @@ export function initiateSepAmbGraph(svg, size, margin) {
 		.attr("fill", "#f08f18")
 		.text("Ambiguity")
 
-	
+}
 
+export function updateSepAmbGraph(rowIdx, colIdx) {
+	const sepVal = SEP[rowIdx][colIdx];
+
+	d3.select("#sepAmbSvg")
+	  .selectAll("#sepCircle")
+		.remove();
+
+	d3.select("#sepAmbSvg")
+		.append("circle")
+	  .attr("cx", XSCALE(sepVal))
+		.attr("cy", YSCALE(sepVal))
+		.attr("r", 5)
+		.attr("fill", "#186bf0")
+		.attr("stroke", "black")
+		.attr("stroke-width", 2)
+		.attr("id", "sepCircle")
+
+	const ambVal = -sepVal * Math.log2(sepVal) - (1 - sepVal) * Math.log2(1 - sepVal);
+
+	d3.select("#sepAmbSvg")
+		.selectAll("#ambCircle")
+		.remove();
+	
+	d3.select("#sepAmbSvg")
+		.append("circle")
+		.attr("cx", XSCALE(sepVal))
+		.attr("cy", YSCALE(ambVal))
+		.attr("r", 5)
+		.attr("fill", "#f08f18")
+		.attr("stroke", "black")
+		.attr("stroke-width", 2)
+		.attr("id", "ambCircle")
+
+}
+
+export function deleteSepAmbGraph() {
+	d3.select("#sepAmbSvg")
+	  .selectAll("#sepCircle")
+		.remove();
+
+	d3.select("#sepAmbSvg")
+		.selectAll("#ambCircle")
+		.remove();
 }
