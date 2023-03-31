@@ -30,6 +30,25 @@ function App() {
 		RENDERER.drawSplot(mainSvgSize, canvas, ctx, normalizedData)
 	}
 
+	const handleFileUpload = (e) =>{
+		const file = e.target.files[0];
+		if (file && file.type === 'application/json') {
+			const reader = new FileReader();
+			reader.onload = (e) => {
+				try {
+					const jsonContent = JSON.parse(e.target.result);
+					normalizedData = UTILS.normalize(jsonContent, mainSvgSize, mainSvgMargin);
+					RENDERER.drawSplot(mainSvgSize, canvas, ctx, normalizedData)
+				} catch (error) {
+					alert('Invalid JSON file');
+				}
+			};
+			reader.readAsText(file);
+		} else {
+			alert('Please upload a JSON file');
+		}
+	}
+
   return (
     <div className="App">
 			<h1>CLAMS DEMO</h1>
@@ -40,15 +59,25 @@ function App() {
 			<div id="mainSvgDiv">
 				<div id="mainCanvasDiv">
 					<canvas id="mainCanvas" width={mainSvgSize} height={mainSvgSize}></canvas>
-					<div id="mainSvgButtonDiv">
-						<button id="uploadButton" className="svgButton">Upload JSON dataset</button>
-						<select className="svgSelect" onChange={selectScatterplot}>
-							<option value="none">Select a Scatterplot</option>
-							{datasetList.map((dataset, i) => (
-								<option value={dataset} key={i}>{dataset}</option>
-							))}
-						</select>
-						<button id="initializeButton" className="svgButton">Initialize!!</button>
+					<div >
+						{/* <button id="uploadButton" className="svgButton">Upload JSON dataset</button> */}
+						<div id="mainSvgButtonDiv">
+							<label for="svgInput">
+								<div id="uploadButtonDiv">
+									Upload JSON DATASET
+								</div>
+								<input id="svgInput" type="file" accept=".json" onChange={handleFileUpload} />
+							</label>
+							
+							<select className="svgSelect" onChange={selectScatterplot}>
+								<option value="none">Select a Scatterplot</option>
+								{datasetList.map((dataset, i) => (
+									<option value={dataset} key={i}>{dataset}</option>
+								))}
+							</select>
+							<button id="initializeButton" className="svgButton">Reset!!</button>
+							
+						</div>
 					</div>
 				</div>
 			</div>
