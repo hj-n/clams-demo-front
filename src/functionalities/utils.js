@@ -50,7 +50,6 @@ export function extractAmbDataFromResponse(res) {
 	const means = data.means;
 	const covs = data.covariances; 
 	const proba = data.proba;
-	console.log(data.separability_list)
 	for (let i = 0; i < keyList.length; i++) {
 		const key = keyList[i].split("_");
 		sepMat[key[1]][key[0]] = data.separability_list[i];
@@ -87,7 +86,6 @@ export function extractLabels(proba) {
 		});
 		const rand = Math.random();
 		let label = 0;
-		console.log(probAccumulate)
 		for (let j = 0; j < probAccumulate.length; j++) {
 			if (rand < probAccumulate[j]) {
 				label = j

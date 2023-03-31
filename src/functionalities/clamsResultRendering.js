@@ -150,6 +150,26 @@ export function renderMat(svg, size, mat, colorScale, isSep=false) {
 		.attr("cy", (d, i) => (i ) * cellSize + cellSize / 2)
 		.attr("r", cellSize / 2 - 6)
 		.attr("fill", (d, i) => colorScale(i + 1))
+
+	if (isSep) {
+		d3.select(svg)
+			.append("g")
+			.attr("transform", `translate(${size / 2 + 23}, ${15})`)
+			.append("text")
+			.text("Separability")
+			.style("font-weight", "bold")
+			.style("fill", "#186bf0")
+	}
+	else {
+		d3.select(svg)
+			.append("g")
+			.attr("transform", `translate(${size / 2 + 28}, ${15})`)
+			.append("text")
+			.text("Ambiguity")
+			.style("font-weight", "bold")
+			.style("fill", "#f08f18")
+
+	}
 }
 
 let XSCALE = null;

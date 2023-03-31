@@ -23,6 +23,11 @@ html {
 	margin: 0 auto;
 }
 
+h1 {
+	font-size: 3em;
+	margin-top: 45px;
+}
+
 #mainSvgDiv {
 	margin: 0 auto;
 	width: 1100px;
@@ -53,8 +58,9 @@ html {
 
 h1 {
 	text-align: center;
-	font-size: 2em;
-	margin-top:45px;
+	font-size: 3em;
+	margin-top:55px;
+	margin-bottom: 30px;
 }
 
 h2 {
@@ -159,9 +165,16 @@ label {
 
 }
 
+#clamsResultDiv {
+	position: relative;
+}
+
 #loadingAlarm {
+	/*  locate in the center of the parent div, which is relative */
 	position: absolute;
-	top: 46%;
-	left: 58%;
+	top: 40%;
+	left: 22%;
+
 	font-size: 2em;
+
 }

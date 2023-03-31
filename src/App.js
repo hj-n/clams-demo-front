@@ -73,6 +73,7 @@ function App() {
 			reader.onload = (e) => {
 				try {
 					const jsonContent = JSON.parse(e.target.result);
+					data = JSON.parse(JSON.stringify(jsonContent));
 					normalizedData = UTILS.normalize(jsonContent, mainSvgSize, mainSvgMargin);
 					RENDERER.drawSplot(mainSvgSize, canvas, ctx, normalizedData, 2, true);
 					initiateClams();
@@ -102,6 +103,7 @@ function App() {
 		document.getElementById("svgInput").disabled = true;
 		document.getElementById("svgInput").style.cursor = "not-allowed";
 		document.getElementById("uploadButtonDiv").style.opacity = "0.5";
+		document.getElementById("uploadButtonDiv").style.cursor = "not-allowed";
 		document.getElementById("svgPre").disabled = true;
 		document.getElementById("svgPre").style.cursor = "not-allowed";
 		// document.getElementById("svgSelect").disabled = true;
@@ -119,6 +121,7 @@ function App() {
 			document.getElementById("svgInput").disabled = false;
 			document.getElementById("svgInput").style.cursor = "pointer";
 			document.getElementById("uploadButtonDiv").style.opacity = "1";
+			document.getElementById("uploadButtonDiv").style.cursor = "pointer";
 			document.getElementById("svgPre").disabled = false;
 			document.getElementById("svgPre").style.cursor = "pointer";
 			CLAMSRENDERER.renderMat(document.getElementById("sepMat"), clamsViewSize, sepMat, colorScale, true);
@@ -139,10 +142,19 @@ function App() {
 
   return (
     <div className="App">
-			<h1>CLAMS DEMO</h1>
+			<h1>PLAY WITH CLAMS!!</h1>
 			<div className="suppDiv">
 				<h2>Supplemental material of the paper <b><i>CLAMS</i>: A Cluster Ambiguity Measure for Estimating Perceptual Variability in Visual Clustering</b></h2>
 			</div>
+			<p>
+				In this demo, you will experience the functionality of <b>CLAMS</b>.
+				You will observe the process of applying CLAMS
+				to a scatterplot to measure cluster ambiguity.
+				You can upload scatterplot data in JSON format or utilize the provided sample scatterplots
+				through a drop-down menu.
+				Once you have drawn or uploaded the scatterplot as desired,
+				wait for seconds for CLAMS to compute cluster ambiguity.
+			</p>
 
 			<div id="mainSvgDiv">
 				<div id="mainCanvasDiv">
@@ -168,6 +180,9 @@ function App() {
 					</div>
 				</div>
 				<div id="clamsResultDiv">
+					<div id="loadingAlarm" style={{ visibility: "hidden" }}>
+						Computing CLAMS...
+					</div>
 					<div>
 						<svg id="sepMat" className="mat" width={clamsViewSize} height={clamsViewSize}></svg>
 						<svg id="ambMat" className="mat" width={clamsViewSize} height={clamsViewSize}></svg>
@@ -179,20 +194,26 @@ function App() {
 					<div id="ambDescription">
 						<p id="ambDescriptionP"></p>
 					</div>
-					<div id="loadingAlarm" style={{visibility: "hidden"}}>
-						Computing CLAMS...
-					</div>
+
 				</div>
 			</div>
+
 			<p>
-				In this demo, you will experience the functionality of <b>CLAMS</b>. 
-				Specifically, you will observe the process of applying CLAMS 
-				to a scatterplot to measure cluster ambiguity. 
-				You can draw a scatterplot by adding Gaussian distributions yourself, 
-				upload scatterplot data in JSON format, 
-				or utilize the provided sample scatterplots.
-				Once you have drawn or uploaded the scatterplot as desired, 
-				press the 'run CLAMS' button to measure cluster ambiguity.</p>
+				After you select or upload a scatterplot (default: t-SNE projection of Fashion MNIST)
+				and CLAMS finish computing cluster ambiguity of the scatterplot, 
+				You will see four visualizations depicting the intermediate results of CLAMS.
+				In the lower right corner, you will see the same scatterplot along with the 
+				Gaussian Mixture Model (GMM) fitted to the scatterplot. Different Gaussian components 
+				are colored differently. Then, you can see the pairwise separability and ambiguity 
+				of the Gaussian components in the heatmaps on the top row. The saturation of the cells 
+				in the heatmaps indicates the pairwise separability and ambiguity of the Gaussian components
+				corresponding to the row and column. The darker the color, the higher the scores.
+			</p>
+			<p>
+				Note that by <b>hovering</b> the mouse over the cells in the heatmaps, 
+				you can highlight the corresponding Gaussian components and data points in the scatterplot.
+				Moreover, this will show the corresponding separability and ambiguity scores in the graph depicted in the lower right corner.
+			</p>
     </div>
   );
 }
