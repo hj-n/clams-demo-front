@@ -1,4 +1,5 @@
 [
+	"fashion_mnist_tsne.json",
 	"breast_cancer_wisconsin_original_rp.json",
 	"cardiovascular_study_isomap.json",
 	"coil20_densmap.json",
@@ -6,7 +7,6 @@
 	"dermatology_isomap.json",
 	"diabetic_retinopathy_debrecen_densmap.json",
 	"dry_bean_densmap.json",
-	"fashion_mnist_tsne.json",
 	"insurance_company_benchmark_densmap.json",
 	"pen_based_recognition_of_handwritten_digits_umap.json",
 	"ph_recognition_densmap.json",

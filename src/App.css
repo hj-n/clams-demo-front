@@ -19,23 +19,32 @@ html {
 
 
 .App {
-	width: 1000px;
+	width: 1100px;
 	margin: 0 auto;
 }
 
 #mainSvgDiv {
 	margin: 0 auto;
-	width: 1000px;
+	width: 1100px;
 	/* make inner div to be center aligned */
 	display: flex;
 	justify-content: center;
-	display: block;
 }
 
 #mainCanvas {
 	border: 1px solid #000;
 	margin-top: 20px;
 	margin-bottom: 20px;
+}
+
+#clamsGMMCanvas {
+		margin-top: 20px;
+			margin-left: 20px;
+}
+
+#sepAmbSvg {
+	margin-top: 20px;
+	margin-left: 20px;
 }
 
 #mainCanvasDiv {
@@ -128,4 +137,9 @@ label {
 	/* background-color:  #eee; */
 	/* color: white; */
 	font-weight: 800;
+}
+
+.mat {
+	margin-top: 20px;
+	margin-left: 20px;
 }
