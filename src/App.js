@@ -6,7 +6,7 @@ import * as UTILS from './functionalities/utils';
 
 function App() {
 
-	const mainSvgSize = 600;
+	const mainSvgSize = 500;
 	const mainSvgMargin = 30;
 	const datasetList = require("./dataset_list.json");
 	let canvas, ctx;
@@ -21,11 +21,14 @@ function App() {
 
 	
 	const selectScatterplot = (e) => {
+		if (e.target.value === "none") {
+			RENDERER.initializeSplot(mainSvgSize, canvas, ctx);
+			return;
+		}
 		const data = require(`./pre_datasets/${e.target.value}`);
 		normalizedData = UTILS.normalize(data, mainSvgSize, mainSvgMargin);
 		RENDERER.drawSplot(mainSvgSize, canvas, ctx, normalizedData)
 	}
-
 
   return (
     <div className="App">
@@ -35,17 +38,18 @@ function App() {
 			</div>
 
 			<div id="mainSvgDiv">
-				<canvas id="mainCanvas" width={mainSvgSize} height={mainSvgSize}></canvas>
-				<div id="mainSvgButtonDiv">
-					<button id="startDrawing" className="svgButton">Start Drawing!!</button>
-					<button id="uploadButton" className="svgButton">Upload JSON dataset</button>
-					<select className="svgSelect" onChange={selectScatterplot}>
-						<option value="none">Select a Scatterplot</option>
-						{datasetList.map((dataset, i) => (
-							<option value={dataset} key={i}>{dataset}</option>
-						))}
-					</select>
-					<button id="initializeButton" className="svgButton">Initialize!!</button>
+				<div id="mainCanvasDiv">
+					<canvas id="mainCanvas" width={mainSvgSize} height={mainSvgSize}></canvas>
+					<div id="mainSvgButtonDiv">
+						<button id="uploadButton" className="svgButton">Upload JSON dataset</button>
+						<select className="svgSelect" onChange={selectScatterplot}>
+							<option value="none">Select a Scatterplot</option>
+							{datasetList.map((dataset, i) => (
+								<option value={dataset} key={i}>{dataset}</option>
+							))}
+						</select>
+						<button id="initializeButton" className="svgButton">Initialize!!</button>
+					</div>
 				</div>
 			</div>
 			<p>
