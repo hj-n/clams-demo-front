@@ -143,3 +143,25 @@ label {
 	margin-top: 20px;
 	margin-left: 20px;
 }
+
+#ambDescription {
+	/* left align contents */
+	/* text-align: left; */
+	display: flex;
+	justify-content: end;
+}
+
+#ambDescriptionP {
+	/* left algin */
+	text-align: left;
+	display: block;
+	/* margin: auto; */
+
+}
+
+#loadingAlarm {
+	position: absolute;
+	top: 46%;
+	left: 58%;
+	font-size: 2em;
+}

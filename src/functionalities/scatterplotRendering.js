@@ -36,7 +36,7 @@ export function drawSplot(size, canvas, ctx, data, rad = 2, isBig = false) {
 }
 
 export function drawSplotWithLabels(rad = 2, labelIdices) {
-	const colorScale = d3.scaleOrdinal(d3.schemeTableau10).domain([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+	const colorScale = d3.scaleOrdinal(d3.schemeSet3).domain([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
 	// console.log("DRAW!!", LABELS)
 	console.log(LABELS)
 	CTX.clearRect(0, 0, SIZE, SIZE);

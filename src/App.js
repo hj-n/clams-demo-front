@@ -17,7 +17,7 @@ function App() {
 	let canvas, ctx;
 	let clamsCanvas, clamsCtx;
 
-	const colorScale = d3.scaleOrdinal(d3.schemeTableau10).domain([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+	const colorScale = d3.scaleOrdinal(d3.schemeSet3).domain([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
 
 	const SERVER_URL = "http://147.46.242.161:9999"
 
@@ -59,9 +59,11 @@ function App() {
 			RENDERER.initializeSplot(mainSvgSize, canvas, ctx);
 			return;
 		}
-		const data = require(`./pre_datasets/${e.target.value}`);
+		data = require(`./pre_datasets/${e.target.value}`);
 		normalizedData = UTILS.normalize(data, mainSvgSize, mainSvgMargin);
-		RENDERER.drawSplot(mainSvgSize, canvas, ctx, normalizedData)
+		RENDERER.drawSplot(mainSvgSize, canvas, ctx, normalizedData, 2, true);
+		initiateClams();
+		runClams();
 	}
 
 	const handleFileUpload = (e) =>{
@@ -72,7 +74,9 @@ function App() {
 				try {
 					const jsonContent = JSON.parse(e.target.result);
 					normalizedData = UTILS.normalize(jsonContent, mainSvgSize, mainSvgMargin);
-					RENDERER.drawSplot(mainSvgSize, canvas, ctx, normalizedData);
+					RENDERER.drawSplot(mainSvgSize, canvas, ctx, normalizedData, 2, true);
+					initiateClams();
+					runClams();
 					
 				} catch (error) {
 					alert('Invalid JSON file');
@@ -84,8 +88,23 @@ function App() {
 		}
 	}
 
+	const initiateClams = () => {
+		d3.select("#sepAmbSvg").selectAll("*").remove();
+		d3.select("#sepMat").selectAll("*").remove();
+		d3.select("#ambMat").selectAll("*").remove();
+		document.getElementById("clamsGMMCanvas").getContext("2d").clearRect(0, 0, clamsViewSize, clamsViewSize);
+		document.getElementById("ambDescriptionP").innerHTML = "";
+	}
+
 	const runClams = () => {
 		smallNormalizedData = UTILS.normalize(data, clamsViewSize, clamsViewMargin);
+		document.getElementById("loadingAlarm").style.visibility = "visible";
+		document.getElementById("svgInput").disabled = true;
+		document.getElementById("svgInput").style.cursor = "not-allowed";
+		document.getElementById("uploadButtonDiv").style.opacity = "0.5";
+		document.getElementById("svgPre").disabled = true;
+		document.getElementById("svgPre").style.cursor = "not-allowed";
+		// document.getElementById("svgSelect").disabled = true;
 		axios.post(`${SERVER_URL}/clams`, {
 			data: smallNormalizedData
 		}).then((res) => {
@@ -96,14 +115,21 @@ function App() {
 			means  = responseParseResult.means;
 			covs   = responseParseResult.covs;
 			labels = UTILS.extractLabels(responseParseResult.proba);
+			document.getElementById("loadingAlarm").style.visibility = "hidden";
+			document.getElementById("svgInput").disabled = false;
+			document.getElementById("svgInput").style.cursor = "pointer";
+			document.getElementById("uploadButtonDiv").style.opacity = "1";
+			document.getElementById("svgPre").disabled = false;
+			document.getElementById("svgPre").style.cursor = "pointer";
 			CLAMSRENDERER.renderMat(document.getElementById("sepMat"), clamsViewSize, sepMat, colorScale, true);
 			CLAMSRENDERER.renderMat(document.getElementById("ambMat"), clamsViewSize, ambMat, colorScale);
 			RENDERER.initializeSplot(clamsViewSize, clamsCanvas, clamsCtx);
 			covs = UTILS.decomposeCov(covs);
 			RENDERER.drawSplot(clamsViewSize, clamsCanvas, clamsCtx, smallNormalizedData, 0.7);
 			RENDERER.installLabels(labels);
-			CLAMSRENDERER.renderGMM(clamsCanvas, clamsCtx, means, covs, colorScale, smallNormalizedData);
+			CLAMSRENDERER.renderGMM(clamsCanvas, clamsCtx, means, covs, colorScale, smallNormalizedData, ambiguity);
 			CLAMSRENDERER.initiateSepAmbGraph(document.getElementById("sepAmbSvg"), clamsViewSize, clamsViewMargin);
+			document.getElementById("ambDescriptionP").innerHTML = "The cluster ambiguity of the scatterplot is <b>" + ambiguity.toFixed(2) + "</b>.";
 		}).catch((err) => {
 			console.log(err)
 			alert("Server is currently unavailable.")
@@ -131,13 +157,12 @@ function App() {
 								<input id="svgInput" type="file" accept=".json" onChange={handleFileUpload} />
 							</label>
 							
-							<select className="svgSelect" onChange={selectScatterplot}>
+							<select id="svgPre" className="svgSelect" onChange={selectScatterplot}>
 								{/* <option value="none">Select a Scatterplot</option> */}
 								{datasetList.map((dataset, i) => (
 									<option value={dataset} key={i}>{dataset}</option>
 								))}
 							</select>
-							<button id="initializeButton" className="svgButton">Reset!!</button>
 
 						</div>
 					</div>
@@ -150,6 +175,12 @@ function App() {
 					<div>
 						<canvas id="clamsGMMCanvas" width={clamsViewSize} height={clamsViewSize}></canvas>
 						<svg id="sepAmbSvg" width={clamsViewSize} height={clamsViewSize}></svg>
+					</div>
+					<div id="ambDescription">
+						<p id="ambDescriptionP"></p>
+					</div>
+					<div id="loadingAlarm" style={{visibility: "hidden"}}>
+						Computing CLAMS...
 					</div>
 				</div>
 			</div>

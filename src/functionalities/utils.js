@@ -24,11 +24,11 @@ export function decomposeCov(covs) {
 		const angle = Math.atan2(v[1][0], v[0][0]);
 		let a = Math.sqrt(q[0]);
 		let b = Math.sqrt(q[1]);
-		if (a < b) {
-			let temp = a;
-			a = b;
-			b = temp;
-		}
+		// if (a < b) {
+		// 	let temp = a;
+		// 	a = b;
+		// 	b = temp;
+		// }
 		return {
 			a: a,
 			b: b,

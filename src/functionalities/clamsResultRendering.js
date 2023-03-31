@@ -9,8 +9,9 @@ let CANVAS = null;
 let CTX = null;
 let COLORSCALE = null;
 let DATA = null;
+let AMBIGUITY = null;
 
-export function renderGMM(canvas, ctx, means, covs, colorScale, data) {
+export function renderGMM(canvas, ctx, means, covs, colorScale, data, ambiguity) {
 	// render gmm info in the canvas
 	// const ctx = canvas.getContext("2d");
 	// ctx.clearRect(0, 0, size, size);
@@ -41,6 +42,7 @@ export function renderGMM(canvas, ctx, means, covs, colorScale, data) {
 	CTX = ctx;
 	COLORSCALE = colorScale;
 	DATA = data;
+	AMBIGUITY = ambiguity;
 }
 
 
@@ -271,6 +273,7 @@ export function updateSepAmbGraph(rowIdx, colIdx) {
 		.attr("stroke-width", 2)
 		.attr("id", "ambCircle")
 
+	document.getElementById("ambDescriptionP").innerHTML = `The separability is <b>${sepVal.toFixed(2)}</b>, and the ambiguity is <b>${ambVal.toFixed(2)}</b>.`;
 }
 
 export function deleteSepAmbGraph() {
@@ -281,4 +284,5 @@ export function deleteSepAmbGraph() {
 	d3.select("#sepAmbSvg")
 		.selectAll("#ambCircle")
 		.remove();
+	document.getElementById("ambDescriptionP").innerHTML = "The cluster ambiguity of the scatterplot is <b>" + AMBIGUITY.toFixed(2) + "</b>.";
 }
