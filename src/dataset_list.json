@@ -1,0 +1,18 @@
+[
+	"breast_cancer_wisconsin_original_rp_3.npy.json",
+	"cardiovascular_study_isomap_16.npy.json",
+	"coil20_densmap_16.npy.json",
+	"crowdsourced_mapping_umap_2.npy.json",
+	"dermatology_isomap_5.npy.json",
+	"diabetic_retinopathy_debrecen_densmap_10.npy.json",
+	"dry_bean_densmap_15.npy.json",
+	"fashion_mnist_tsne_9.npy.json",
+	"insurance_company_benchmark_densmap_9.npy.json",
+	"pen_based_recognition_of_handwritten_digits_umap_18.npy.json",
+	"ph_recognition_densmap_10.npy.json",
+	"rice_seed_gonen_jasmine_lle_16.npy.json",
+	"seismic_bumps_umap_14.npy.json",
+	"statlog_image_segmentation_lle_3.npy.json",
+	"website_phishing_densmap_2.npy.json",
+	"yeast_tsne_2.npy.json"
+]
