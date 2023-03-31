@@ -1,5 +1,6 @@
 import * as d3 from 'd3';
 import * as CLAMSRENDERING from './clamsResultRendering';
+import * as RENDERER from "./scatterplotRendering";
 
 export function mouseHoverMatCell(rowCell, matCell, val) {
 	d3.selectAll(`.class_${rowCell}_${matCell}`)
@@ -10,7 +11,7 @@ export function mouseHoverMatCell(rowCell, matCell, val) {
 	CLAMSRENDERING.emphasizeGMM([rowCell, matCell]);
 	CLAMSRENDERING.updateSepAmbGraph(rowCell, matCell);
 	
-
+	RENDERER.drawSplotWithLabels(2, [rowCell, matCell]);
 }
 
 export function mouseOutMatCell(rowCell, matCell) {
@@ -19,4 +20,6 @@ export function mouseOutMatCell(rowCell, matCell) {
 	
 	CLAMSRENDERING.emphasizeGMM([]);
 	CLAMSRENDERING.deleteSepAmbGraph();
+
+	RENDERER.drawSplotWithLabels(2, []);
 }

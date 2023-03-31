@@ -85,6 +85,8 @@ export function renderMat(svg, size, mat, colorScale, isSep=false) {
 		SEP = mat;
 	}
 
+	console.log(mat)
+
 	// matrix is a 2d array
 	d3.select(svg)
 		.selectAll("g")

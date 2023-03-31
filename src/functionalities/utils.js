@@ -81,18 +81,20 @@ export function extractLabels(proba) {
 		const prob = proba[i];
 		const probAccumulate = new Array(prob.length).fill(0);
 		prob.forEach((p, j) => {
-			for (let k = 0; k <= j; k++) {
+			for (let k = j; k < prob.length; k++) {
 				probAccumulate[k] += p;
 			}
 		});
 		const rand = Math.random();
 		let label = 0;
+		console.log(probAccumulate)
 		for (let j = 0; j < probAccumulate.length; j++) {
 			if (rand < probAccumulate[j]) {
-				label = j;
+				label = j
 				break;
 			}
 		}
+		labels.push(label);
 	}
 	return labels;
 

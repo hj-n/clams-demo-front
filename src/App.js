@@ -17,7 +17,7 @@ function App() {
 	let canvas, ctx;
 	let clamsCanvas, clamsCtx;
 
-	const colorScale = d3.scaleOrdinal(d3.schemeTableau10);
+	const colorScale = d3.scaleOrdinal(d3.schemeTableau10).domain([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
 
 	const SERVER_URL = "http://147.46.242.161:9999"
 
@@ -48,7 +48,7 @@ function App() {
 		const datasetName = document.getElementsByClassName("svgSelect")[0].value 
 		data = require(`./pre_datasets/${datasetName}`);
 		normalizedData = UTILS.normalize(data, mainSvgSize, mainSvgMargin);
-		RENDERER.drawSplot(mainSvgSize, canvas, ctx, normalizedData)
+		RENDERER.drawSplot(mainSvgSize, canvas, ctx, normalizedData,2,  true)
 		runClams();
 	
 	}, []);
@@ -101,6 +101,7 @@ function App() {
 			RENDERER.initializeSplot(clamsViewSize, clamsCanvas, clamsCtx);
 			covs = UTILS.decomposeCov(covs);
 			RENDERER.drawSplot(clamsViewSize, clamsCanvas, clamsCtx, smallNormalizedData, 0.7);
+			RENDERER.installLabels(labels);
 			CLAMSRENDERER.renderGMM(clamsCanvas, clamsCtx, means, covs, colorScale, smallNormalizedData);
 			CLAMSRENDERER.initiateSepAmbGraph(document.getElementById("sepAmbSvg"), clamsViewSize, clamsViewMargin);
 		}).catch((err) => {
