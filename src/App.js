@@ -135,85 +135,120 @@ function App() {
 			document.getElementById("ambDescriptionP").innerHTML = "The cluster ambiguity of the scatterplot is <b>" + ambiguity.toFixed(2) + "</b>.";
 		}).catch((err) => {
 			console.log(err)
-			alert("Server is currently unavailable.")
+			alert("Oops! Something went wrong with the server. Please try again.")
 		})
 
 	}
 
   return (
     <div className="App">
-			<h1>PLAY WITH CLAMS!!</h1>
+			<h1>CLAMS DEMO INTERFACE</h1>
 			<div className="suppDiv">
 				<h2>Supplemental material of the paper <b><i>CLAMS</i>: A Cluster Ambiguity Measure for Estimating Perceptual Variability in Visual Clustering</b></h2>
 			</div>
 			<p>
-				In this demo, you will experience the functionality of <b>CLAMS</b>.
-				You will observe the process of applying CLAMS
-				to a scatterplot to measure cluster ambiguity.
-				You can upload scatterplot data in JSON format or utilize the provided sample scatterplots
-				through a drop-down menu.
-				Once you have drawn or uploaded the scatterplot as desired,
-				wait for seconds for CLAMS to compute cluster ambiguity.
+				<b> <i>Please give a few seconds for the CLAMS results to load. The connection might be slow or unstable.</i> </b>
 			</p>
+			<p>
+				We introduce a visual quality measure (VQM) called
+				CLAMS uses a statistical model derived from perceptual data to
+				automatically assess cluster ambiguity in monochrome scatterplots
+				In this interactive demo, you will experience the functionality of <b>CLAMS</b>. 
+				You will observe applying CLAMS to a scatterplot to measure cluster ambiguity.
+				 You can <b>upload</b> scatterplot data in JSON format (holding 2D array) or <b> select</b> the provided 
+				 sample scatterplots through a drop-down menu. Once you have drawn or uploaded the scatterplot
+				 as desired, wait a few seconds for CLAMS to compute cluster ambiguity.
+			</p>
+			<h3>
+				Instruction
+			</h3>
 
-			<div id="mainSvgDiv">
-				<div id="mainCanvasDiv">
-					<canvas id="mainCanvas" width={mainSvgSize} height={mainSvgSize}></canvas>
-					<div >
-						{/* <button id="uploadButton" className="svgButton">Upload JSON dataset</button> */}
-						<div id="mainSvgButtonDiv">
-							<label htmlFor="svgInput">
-								<div id="uploadButtonDiv">
-									Upload JSON DATASET
+			<p>
+				After you select or upload a dataset (default: t-SNE projection of Fashion-MNIST) 
+				and CLAMS finishes computing cluster ambiguity of the scatterplot, 
+				you will see four visualizations depicting the intermediate results CLAMS. 
+				(1) In the lower-left corner, you will see the same scatterplot and the 
+				Gaussian Mixture Model (GMM) fitted to the scatterplot. 
+				Each Gaussian component is colored differently; 
+				(2) you can see the pairwise separability and 
+				(3) the pairwise ambiguity of the Gaussian components in the heatmaps on the top row. 
+				The saturation of the cells in the heatmaps indicates the pairwise separability and ambiguity 
+				of the Gaussian components corresponding to the row and column. 
+				The darker the color, the higher the scores. 
+				Note that you can highlight the corresponding Gaussian components and 
+				data points in the scatterplot by <b>hovering</b> the mouse over the cells in the heatmaps. 
+				(4) Moreover, this will show the graph's corresponding separability and ambiguity scores in the 
+				lower right corner. 
+				Our interface calculates the ambiguity score for each selected dataset's scatterplot.
+			</p>
+			<div id="demoDiv">
+				<div id="titleDiv">
+					<div className="titleDivSmall" style={{ width: mainSvgSize + mainSvgMargin}}>
+						<h3> INPUT SCATTERPLOT</h3>
+					</div>
+					<div className="titleDivSmall" style={{ width: mainSvgSize }}>
+						<h3> CLAMS OUTPUT</h3>
+					</div>
+				</div>
+				<div id="mainSvgDiv">
+					
+					<div id="mainCanvasDiv">
+						<canvas id="mainCanvas" width={mainSvgSize} height={mainSvgSize}></canvas>
+						<div >
+							{/* <button id="uploadButton" className="svgButton">Upload JSON dataset</button> */}
+							<div id="mainSvgButtonDiv">
+								<div>
+									<label htmlFor="svgInput">
+										<div id="uploadButtonDiv">
+											Upload DATASET
+										</div>
+										<input id="svgInput" type="file" accept=".json" onChange={handleFileUpload} />
+									</label>
+									<div className="buttonDesc">
+										Upload your JSON dataset with 2D array
+									</div>
 								</div>
-								<input id="svgInput" type="file" accept=".json" onChange={handleFileUpload} />
-							</label>
-							
-							<select id="svgPre" className="svgSelect" onChange={selectScatterplot}>
-								{/* <option value="none">Select a Scatterplot</option> */}
-								{datasetList.map((dataset, i) => (
-									<option value={dataset} key={i}>{dataset}</option>
-								))}
-							</select>
+								<div>
+									<select id="svgPre" className="svgSelect" onChange={selectScatterplot}>
+										{/* <option value="none">Select a Scatterplot</option> */}
+										{datasetList.map((dataset, i) => (
+											<option value={dataset} key={i}>{dataset}</option>
+										))}
+									</select>
+									<div className="buttonDesc">
+										Select available dataset
+									</div>
+								</div>
 
+							</div>
 						</div>
 					</div>
-				</div>
-				<div id="clamsResultDiv">
-					<div id="loadingAlarm" style={{ visibility: "hidden" }}>
-						Computing CLAMS...
-					</div>
-					<div>
-						<svg id="sepMat" className="mat" width={clamsViewSize} height={clamsViewSize}></svg>
-						<svg id="ambMat" className="mat" width={clamsViewSize} height={clamsViewSize}></svg>
-					</div>
-					<div>
-						<canvas id="clamsGMMCanvas" width={clamsViewSize} height={clamsViewSize}></canvas>
-						<svg id="sepAmbSvg" width={clamsViewSize} height={clamsViewSize}></svg>
-					</div>
-					<div id="ambDescription">
-						<p id="ambDescriptionP"></p>
-					</div>
+					<div id="clamsResultDiv">
+						<div id="loadingAlarm" style={{ visibility: "hidden" }}>
+							Computing CLAMS...
+						</div>
+						<div>
+							<svg id="sepMat" className="mat" width={clamsViewSize} height={clamsViewSize}></svg>
+							<svg id="ambMat" className="mat" width={clamsViewSize} height={clamsViewSize}></svg>
+						</div>
+						<div>
+							<canvas id="clamsGMMCanvas" width={clamsViewSize} height={clamsViewSize}></canvas>
+							<svg id="sepAmbSvg" width={clamsViewSize} height={clamsViewSize}></svg>
+						</div>
+						<div id="ambDescription">
+							<p id="ambDescriptionP"></p>
+						</div>
 
+					</div>
 				</div>
 			</div>
-
 			<p>
-				After you select or upload a scatterplot (default: t-SNE projection of Fashion MNIST)
-				and CLAMS finish computing cluster ambiguity of the scatterplot, 
-				You will see four visualizations depicting the intermediate results of CLAMS.
-				In the lower right corner, you will see the same scatterplot along with the 
-				Gaussian Mixture Model (GMM) fitted to the scatterplot. Different Gaussian components 
-				are colored differently. Then, you can see the pairwise separability and ambiguity 
-				of the Gaussian components in the heatmaps on the top row. The saturation of the cells 
-				in the heatmaps indicates the pairwise separability and ambiguity of the Gaussian components
-				corresponding to the row and column. The darker the color, the higher the scores.
+				For more information and discussions, please read our academic paper 
+				"<i>CLAMS</i>: A Cluster Ambiguity Measure for Estimating Perceptual Variability in Visual Clustering". 
 			</p>
-			<p>
-				Note that by <b>hovering</b> the mouse over the cells in the heatmaps, 
-				you can highlight the corresponding Gaussian components and data points in the scatterplot.
-				Moreover, this will show the corresponding separability and ambiguity scores in the graph depicted in the lower right corner.
-			</p>
+			<h3>
+				Thank you for enjoying CLAMS!
+			</h3>
     </div>
   );
 }

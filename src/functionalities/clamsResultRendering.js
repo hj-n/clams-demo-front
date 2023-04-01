@@ -17,9 +17,7 @@ export function renderGMM(canvas, ctx, means, covs, colorScale, data, ambiguity)
 	// ctx.clearRect(0, 0, size, size);
 
 	// draw ellipse
-	console.log(covs)
 
-	console.log(means)
 	const scale = 2;
 
 	means.forEach((mean, i) => {
@@ -87,7 +85,6 @@ export function renderMat(svg, size, mat, colorScale, isSep=false) {
 		SEP = mat;
 	}
 
-	console.log(mat)
 
 	// matrix is a 2d array
 	d3.select(svg)
