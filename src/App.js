@@ -133,9 +133,11 @@ function App() {
 			CLAMSRENDERER.renderGMM(clamsCanvas, clamsCtx, means, covs, colorScale, smallNormalizedData, ambiguity);
 			CLAMSRENDERER.initiateSepAmbGraph(document.getElementById("sepAmbSvg"), clamsViewSize, clamsViewMargin);
 			document.getElementById("ambDescriptionP").innerHTML = "The cluster ambiguity of the scatterplot is <b>" + ambiguity.toFixed(2) + "</b>.";
-		}).catch((err) => {
+		})
+		.catch((err) => {
 			console.log(err)
-			alert("Oops! Something went wrong with the server. Please try again.")
+			runClams();
+			// alert("Oops! Something went wrong with the server. Please try again.")
 		})
 
 	}
